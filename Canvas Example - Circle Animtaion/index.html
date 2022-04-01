@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Example - Circle Animtaion</title>
+    <style>
+        #my-canvas {
+            border: #cacaca 1px solid;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="my-canvas" width="400" height="300">
+        Your web browser does not support canvas element.
+    </canvas>
+    <script>
+        window.onload = draw;
+        let circleX;
+        let circleY;
+        let circleRadius = 60;
+        let speed = 2;
+        let directionX = 1;
+        let directionY = 1;
+        function draw() {
+            let myCanvas = document.getElementById("my-canvas");
+            if (myCanvas.getContext) {
+                let ctx = myCanvas.getContext('2d');
+                circleX = Math.floor(randomNumber(circleRadius, ctx.canvas.width - (circleRadius)));
+                circleY = Math.floor(randomNumber(circleRadius, ctx.canvas.height - (circleRadius)));
+                update(ctx);
+            } else {
+                alert("Canvas is not supported.");
+            }
+        }
+        function update(ctx) {
+            ctx.clearRect(0, 0, 400, 300);
+            ctx.beginPath();
+            ctx.fillStyle = '#4F95FF';
+            ctx.arc(circleX, circleY, 60, 0, 2 * Math.PI);
+            ctx.fill();
+            if (circleX > ctx.canvas.width - circleRadius)
+                directionX = -directionX;
+            if (circleX < circleRadius)
+                directionX = -directionX;
+            if (circleY > ctx.canvas.height - circleRadius)
+                directionY = -directionY;
+            if (circleY < circleRadius)
+                directionY = -directionY;
+            circleX += directionX * speed;
+            circleY += directionY * speed;
+            requestId = requestAnimationFrame(function () {
+                update(ctx);
+            });
+        }
+        function randomNumber(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+    </script>
+</body>
+</html>
